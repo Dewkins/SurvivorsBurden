@@ -1,0 +1,11 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="SB_Sounds.lua"/>
+    <Script file="SB_Texts.lua"/>
+    <Script file="SB_Core.lua"/>
+    <Script file="SB_UI.lua"/>
+    <Script file="SB_Logic.lua"/>
+    <Script file="SB_Minimap.lua"/>
+    <Script file="SB_Commands.lua"/>
+    <Script file="SB_Events.lua"/>	
+    <Script file="SB_Config.lua"/>
+</Ui>
