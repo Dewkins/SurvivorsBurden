@@ -118,16 +118,16 @@ addonTable.TextData = {
                 "takes a moment to wash, smelling much better."
             }
         },
-        sleep = {
+        rest = {
             print = {
-                "|cFFFF9900You rest your eyes and drift into peaceful sleep.|r",
-                "|cFFFF9900The weight of fatigue melts away as you relax.|r",
-                "|cFFFF9900You stretch, yawn and settle into deep rest.|r"
+                "|cFFFF9900You let your body unwind, muscles loosening with relief.|r",
+                "|cFFFF9900The weight of fatigue lifts as you take a well-earned pause.|r",
+                "|cFFFF9900You stretch, yawn and let your mind settle into calm stillness.|r"
             },
             emote = {
-                "closes their eyes, settling into a peaceful rest.",
-                "yawns and drifts off to sleep.",
-                "lies down and begins to breathe deeply as they sleep."
+                "closes their eyes, taking a moment to rest.",
+                "lets out a long sigh and leans back in quiet relaxation.",
+                "settles down, muscles slackening as they unwind."
             }
         },
         relieve = {

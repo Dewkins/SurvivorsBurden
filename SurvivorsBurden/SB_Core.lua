@@ -10,11 +10,11 @@ SurvivorsBurdenDB = SurvivorsBurdenDB or {}
 local playerKey = UnitName("player") .. "-" .. GetRealmName()
 
 -- Default Values
-addonTable.Hunger = 100
-addonTable.Thirst = 100
-addonTable.Fatigue = 100
-addonTable.Hygiene = 100
-addonTable.Bladder = 100
+addonTable.Hunger = 200
+addonTable.Thirst = 200
+addonTable.Fatigue = 200
+addonTable.Hygiene = 200
+addonTable.Bladder = 200
 addonTable.enabled = true
 addonTable.indepthMode = false
 
@@ -29,13 +29,13 @@ addonTable.emoteCounter = 0
 addonTable.lastX, addonTable.lastY = nil, nil
 
 addonTable.lastStage = addonTable.lastStage or {
-    Hunger = 100, Thirst = 100, Fatigue = 100, Hygiene = 100, Bladder = 100
+    Hunger = 200, Thirst = 200, Fatigue = 200, Hygiene = 200, Bladder = 200,
 }
 
 -- Default Config
 function addonTable.GetDefaultConfig()
     return {
-        Hunger = 100, Thirst = 100, Fatigue = 100, Hygiene = 100, Bladder = 100,
+        Hunger = 200, Thirst = 200, Fatigue = 200, Hygiene = 200, Bladder = 200,
         enabled = true,
         indepth = false,
         config = {
@@ -65,11 +65,11 @@ function addonTable.LoadData()
     end
     addonTable.charData = SurvivorsBurdenDB[playerKey]
     
-    addonTable.Hunger = addonTable.charData.Hunger or 100
-    addonTable.Thirst = addonTable.charData.Thirst or 100
-    addonTable.Fatigue = addonTable.charData.Fatigue or 100
-    addonTable.Hygiene = addonTable.charData.Hygiene or 100
-    addonTable.Bladder = addonTable.charData.Bladder or 100
+    addonTable.Hunger = addonTable.charData.Hunger or 200
+    addonTable.Thirst = addonTable.charData.Thirst or 200
+    addonTable.Fatigue = addonTable.charData.Fatigue or 200
+    addonTable.Hygiene = addonTable.charData.Hygiene or 200
+    addonTable.Bladder = addonTable.charData.Bladder or 200
 
     addonTable.enabled = addonTable.charData.enabled
     addonTable.indepthMode = addonTable.charData.indepth

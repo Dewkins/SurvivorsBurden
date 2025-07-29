@@ -6,7 +6,7 @@ frame:RegisterEvent("PLAYER_LOGOUT")
 frame:RegisterEvent("CHAT_MSG_SAY")
 frame:RegisterEvent("CHAT_MSG_EMOTE")
 
-frame:SetScript("OnEvent", function(self, event, arg1)
+frame:SetScript("OnEvent", function(self, event, arg1, arg2)
     if event == "ADDON_LOADED" and arg1 == addonName then
         addonTable.LoadData()
         addonTable.SaveData()
@@ -25,19 +25,21 @@ frame:SetScript("OnEvent", function(self, event, arg1)
         addonTable.SaveData()
 
     elseif addonTable.enabled and (event == "CHAT_MSG_SAY" or event == "CHAT_MSG_EMOTE") then
+        if arg2 == UnitName("player") .. "-" .. GetRealmName() then return end
+
         if addonTable.charData.config.emoteDrainEnabled then
             addonTable.emoteCounter = addonTable.emoteCounter + 1
             if addonTable.emoteCounter >= 5 then
                 if addonTable.charData.config.hungerEnabled then
-                    addonTable.Hunger = math.max(0, addonTable.Hunger - 1)
+                    addonTable.Hunger = math.max(0, addonTable.Hunger - 0.5)
                 end
                 if addonTable.charData.config.thirstEnabled then
-                    addonTable.Thirst = math.max(0, addonTable.Thirst - 2)
+                    addonTable.Thirst = math.max(0, addonTable.Thirst - 1)
                 end
 
-                if math.random(1, 100) <= 50 then
+                if math.random(1, 100) <= 75 then
                     if addonTable.charData.config.fatigueEnabled then
-                        addonTable.Fatigue = math.max(0, addonTable.Fatigue - 1)
+                        addonTable.Fatigue = math.max(0, addonTable.Fatigue - 0.5)
                     end
                 end
 

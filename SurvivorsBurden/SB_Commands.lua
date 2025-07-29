@@ -26,7 +26,7 @@ local function ShowHelp()
     print("|cFFFFFF00/sb status|r   - Show your current stats")
     print("|cFFFFFF00/sb eat <amount>|r - Restore Hunger")
     print("|cFFFFFF00/sb drink <amount>|r   - Restore Thirst")
-    print("|cFFFFFF00/sb sleep <amount>|r   - Restore Fatigue")
+    print("|cFFFFFF00/sb rest <amount>|r   - Restore Fatigue")
     print("|cFFFFFF00/sb wash <amount>|r    - Restore Hygiene")
     print("|cFFFFFF00/sb relieve <amount>|r  - Restores Bladder (If enabled)")
 end
@@ -90,7 +90,7 @@ SlashCmdList["SURVIVALSBURDEN"] = function(msg)
     end
 
     if command == "eat" then
-        addonTable.Hunger = math.min(100, addonTable.Hunger + value)
+        addonTable.Hunger = math.min(200, addonTable.Hunger + value)
         addonTable.ResetStage("Hunger", addonTable.Hunger)
 
         if addonTable.charData.config.bladderEnabled then
@@ -109,7 +109,7 @@ SlashCmdList["SURVIVALSBURDEN"] = function(msg)
     end
 
     if command == "drink" then
-        addonTable.Thirst = math.min(100, addonTable.Thirst + value)
+        addonTable.Thirst = math.min(200, addonTable.Thirst + value)
         addonTable.ResetStage("Thirst", addonTable.Thirst)
 
         if addonTable.charData.config.bladderEnabled then
@@ -128,7 +128,7 @@ SlashCmdList["SURVIVALSBURDEN"] = function(msg)
     end
 
     if command == "wash" then
-        addonTable.Hygiene = math.min(100, addonTable.Hygiene + value)
+        addonTable.Hygiene = math.min(200, addonTable.Hygiene + value)
         addonTable.ResetStage("Hygiene", addonTable.Hygiene)
         SendImmersiveMessage("wash")
         addonTable.SaveData()
@@ -140,10 +140,10 @@ SlashCmdList["SURVIVALSBURDEN"] = function(msg)
         return
     end
 
-    if command == "sleep" then
-        addonTable.Fatigue = math.min(100, addonTable.Fatigue + value)
+    if command == "rest" then
+        addonTable.Fatigue = math.min(200, addonTable.Fatigue + value)
         addonTable.ResetStage("Fatigue", addonTable.Fatigue)
-        SendImmersiveMessage("sleep")
+        SendImmersiveMessage("rest")
         addonTable.SaveData()
         addonTable.UpdateUI()
 
@@ -154,7 +154,7 @@ SlashCmdList["SURVIVALSBURDEN"] = function(msg)
     end
 
     if command == "relieve" then
-        addonTable.Bladder = math.min(100, addonTable.Bladder + value)
+        addonTable.Bladder = math.min(200, addonTable.Bladder + value)
         addonTable.ResetStage("Bladder", addonTable.Bladder)
         SendImmersiveMessage("relieve")
         addonTable.SaveData()
@@ -180,7 +180,7 @@ SlashCmdList["SURVIVALSBURDEN"] = function(msg)
     if not stat or (stat ~= "hunger" and stat ~= "thirst" and stat ~= "fatigue" and stat ~= "hygiene" and stat ~= "bladder") then
         print("|cFFFFFF00Usage: /sb set <hunger|thirst|fatigue|hygiene|bladder> <amount>|r")
     else
-        amount = math.max(0, math.min(100, amount))
+        amount = math.max(0, math.min(200, amount))
         if stat == "hunger" then
             addonTable.Hunger = amount
             print(string.format("|cffFFD700[SB Debug]|r Hunger set to |cFFFFFF00%d%%|r.", addonTable.Hunger))
@@ -283,7 +283,7 @@ SlashCmdList["SURVIVALSBURDEN"] = function(msg)
     end
 
     if command == "reset" then
-        addonTable.Hunger, addonTable.Thirst, addonTable.Fatigue, addonTable.Hygiene, addonTable.Bladder = 100, 100, 100, 100, 100
+        addonTable.Hunger, addonTable.Thirst, addonTable.Fatigue, addonTable.Hygiene, addonTable.Bladder = 200, 200, 200, 200, 200
         print("|cffFFD700[SB Debug]|r All needs restored to full.")
         addonTable.SaveData()
         addonTable.UpdateUI()
@@ -293,11 +293,11 @@ SlashCmdList["SURVIVALSBURDEN"] = function(msg)
         addonTable.ResetStage("Hygiene", addonTable.Hygiene)
         addonTable.ResetStage("Bladder", addonTable.Bladder)
         if addonTable.charData then
-            addonTable.charData.Hunger = 100
-            addonTable.charData.Thirst = 100
-            addonTable.charData.Fatigue = 100
-            addonTable.charData.Hygiene = 100
-            addonTable.charData.Bladder = 100
+            addonTable.charData.Hunger = 200
+            addonTable.charData.Thirst = 200
+            addonTable.charData.Fatigue = 200
+            addonTable.charData.Hygiene = 200
+            addonTable.charData.Bladder = 200
         end
         return
     end
@@ -349,6 +349,7 @@ SlashCmdList["SURVIVALSBURDEN"] = function(msg)
     if command == "debugsteps" then
         addonTable.debugMove = not addonTable.debugMove
         print("|cffFFD700[SB Debug]|r Step Debug: |cffFFFF00" .. (addonTable.debugMove and "ON" or "OFF") .. "|r")
+        addonTable.UpdateUI()
         return
     end
 

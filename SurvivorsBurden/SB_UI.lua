@@ -104,6 +104,21 @@ function addonTable.ApplyUISettings()
             row.value:SetWidth(width - valueStartX)
 
             lastVisibleRow = row
+
+            if addonTable.debugMove then
+                if not addonTable.stepCounterText then
+                    addonTable.stepCounterText = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+                    addonTable.stepCounterText:SetJustifyH("LEFT")
+                end
+                addonTable.stepCounterText:SetFont(select(1, addonTable.stepCounterText:GetFont()), fontSize)
+                addonTable.stepCounterText:SetText("Steps: " .. addonTable.stepsTaken)
+                addonTable.stepCounterText:SetPoint("TOPLEFT", lastVisibleRow.label, "BOTTOMLEFT", 0, -rowSpacing)
+                addonTable.stepCounterText:Show()
+            else
+                if addonTable.stepCounterText then
+                    addonTable.stepCounterText:Hide()
+                end
+            end
         else
             row.label:Hide()
             row.value:Hide()
@@ -132,8 +147,14 @@ function addonTable.ApplyUISettings()
     end
 
     -- Dynamically calculate frame height
-    local totalHeight = (fontSize * 6) + (visibleRows * (fontSize + 10)) + 15
-    frame:SetHeight(totalHeight)
+    local baseHeight = (fontSize * 6) + (visibleRows * (fontSize + 10)) + 15
+
+    -- Add extra height if debug step counter is shown
+    if addonTable.debugMove then
+        baseHeight = baseHeight + (fontSize + 5)
+    end
+
+    frame:SetHeight(baseHeight)
 end
 
 -- Initial UI Apply
@@ -142,49 +163,61 @@ frame:Show()
 
 -- Severity Icons
 local function GetSeverityIcon(value)
-    if value > 75 then return "|TInterface\\COMMON\\Indicator-Green:12|t"
+    if value > 100 then return "|TInterface\\COMMON\\friendship-archivistscodex:12|t"
+    elseif value > 75 then return "|TInterface\\COMMON\\Indicator-Green:12|t"
     elseif value > 50 then return "|TInterface\\COMMON\\Indicator-Yellow:12|t"
     elseif value > 25 then return "|TInterface\\RAIDFRAME\\ReadyCheck-Waiting:12|t"
     elseif value > 10 then return "|TInterface\\COMMON\\Indicator-Red:12|t"
-    else return "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_7:12|t" end
+    elseif value > 0 then return "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_7:12|t" 
+    else return "|TInterface\\COMMON\\Indicator-Gray:12|t" end
 end
 
 -- Status Text
 function addonTable.GetStatusText(value, type)
     if type == "Hunger" then
-        if value > 75 then return "|cff00FF00You feel comfortably full.|r"
+        if value > 100 then return "|cff00ffccYou feel well-fed.|r"
+        elseif value > 75 then return "|cff00FF00You feel comfortably full.|r"
         elseif value > 50 then return "|cffFFFF00You feel peckish."
         elseif value > 25 then return "|cffFFD700Your stomach growls with hunger.|r"
         elseif value > 10 then return "|cffFF8000Hunger gnaws at your insides.|r"
-        else return "|cffFF0000You feel faint. Starvation sets in.|r"
+        elseif value > 0 then return "|cffFF0000You feel faint. Starvation sets in.|r"
+        else return "|cff9D9D9DYour body is failing.|r"
         end
     elseif type == "Thirst" then
-        if value > 75 then return "|cff00FF00You feel well hydrated.|r"
+        if value > 100 then return "|cff00ffccYou're fully refreshed.|r"
+        elseif value > 75 then return "|cff00FF00You're well hydrated.|r"
         elseif value > 50 then return "|cffFFFF00Your mouth feels dry."
         elseif value > 25 then return "|cffFFD700You thirst for water.|r"
         elseif value > 10 then return "|cffFF8000Your throat burns with thirst.|r"
-        else return "|cffFF0000Your lips crack and your vision blurs.|r"
+        elseif value > 0 then return "|cffFF0000Your lips crack and your vision blurs.|r"
+        else return "|cff9D9D9DDehydration overwhelms you.|r"
         end
     elseif type == "Fatigue" then
-        if value > 75 then return "|cff00FF00You feel rested and alert.|r"
+        if value > 100 then return "|cff00ffccYou feel well-rested.|r"
+        elseif value > 75 then return "|cff00FF00You're alert and steady.|r"
         elseif value > 50 then return "|cffFFFF00Your body aches for rest."
         elseif value > 25 then return "|cffFFD700Fatigue slows your steps.|r"
         elseif value > 10 then return "|cffFF8000Your eyelids fight to stay open.|r"
-        else return "|cffFF0000You stumble from exhaustion.|r"
+        elseif value > 0 then return "|cffFF0000You stumble from exhaustion.|r"
+        else return "|cff9D9D9DYou're collapsing.|r"
         end
     elseif type == "Hygiene" then
-        if value > 75 then return "|cff00FF00You're clean and presentable.|r"
+        if value > 100 then return "|cff00ffccYou feel freshly bathed.|r"
+        elseif value > 75 then return "|cff00FF00You're clean and presentable.|r"
         elseif value > 50 then return "|cffFFFF00You smell faintly of sweat."
-        elseif value > 25 then return "|cffFFD700Grime clings to your skin.|r"
-        elseif value > 10 then return "|cffFF8000The stench makes others recoil.|r"
-        else return "|cffFF0000Flies buzz around your filth.|r"
+        elseif value > 25 then return "|cffFFD700You're slick with sweat.|r"
+        elseif value > 10 then return "|cffFF8000A sour musk hangs off your skin.|r"
+        elseif value > 0 then return "|cffFF0000Flies buzz around your filth.|r"
+        else return "|cff9D9D9DThe stench makes others recoil.|r"
         end
     elseif type == "Bladder" then
-        if value > 75 then return "|cff00FF00You feel comfortable.|r"
+        if value > 100 then return "|cff00ffccYou feel light and relieved.|r"
+        elseif value > 75 then return "|cff00FF00You feel comfortable.|r"
         elseif value > 50 then return "|cffFFFF00You could use a trip to the privy."
         elseif value > 25 then return "|cffFFD700Your bladder feels uncomfortably full.|r"
         elseif value > 10 then return "|cffFF8000You desperately need relief.|r"
-        else return "|cffFF0000You're about to have an accident!|r"
+        elseif value > 0 then return "|cffFF0000You're about to have an accident!|r"
+        else return "|cff9D9D9DDignity has left the building.|r"
         end
     end
 end

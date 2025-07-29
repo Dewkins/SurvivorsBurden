@@ -189,16 +189,16 @@ local options = {
                         name = "Reset All Needs",
                         desc = "Restore Hunger, Thirst, Fatigue and Hygiene to full.",
                         func = function()
-                            addonTable.Hunger = 100
-                            addonTable.Thirst = 100
-                            addonTable.Fatigue = 100
-                            addonTable.Hygiene = 100
-                            addonTable.Bladder = 100
-                            addonTable.charData.Hunger = 100
-                            addonTable.charData.Thirst = 100
-                            addonTable.charData.Fatigue = 100
-                            addonTable.charData.Hygiene = 100
-                            addonTable.charData.Bladder = 100
+                            addonTable.Hunger = 200
+                            addonTable.Thirst = 200
+                            addonTable.Fatigue = 200
+                            addonTable.Hygiene = 200
+                            addonTable.Bladder = 200
+                            addonTable.charData.Hunger = 200
+                            addonTable.charData.Thirst = 200
+                            addonTable.charData.Fatigue = 200
+                            addonTable.charData.Hygiene = 200
+                            addonTable.charData.Bladder = 200
                             addonTable.ResetStage("Hunger", addonTable.Hunger)
                             addonTable.ResetStage("Thirst", addonTable.Thirst)
                             addonTable.ResetStage("Fatigue", addonTable.Fatigue)
@@ -251,6 +251,7 @@ local options = {
                         set = function(_, val)
                             addonTable.debugMove = val
                             print("|cffFFD700[SB Debug]|r Step Debug: |cffFFFF00" .. (addonTable.debugMove and "ON" or "OFF") .. "|r")
+                            addonTable.UpdateUI()
 
                         end,
                         order = 3,
@@ -286,11 +287,12 @@ local options = {
                         type = "range",
                         name = "Set Hunger",
                         desc = "Adjust your Hunger stat.",
-                        min = 0, max = 100, step = 1,
+                        min = 0, max = 200, step = 1,
                         get = function() return addonTable.Hunger or 0 end,
                         set = function(_, val)
                             addonTable.Hunger = val
                             addonTable.charData.Hunger = val
+                            addonTable.ResetStage("Hunger", addonTable.Hunger)
                             addonTable.SaveData()
                             addonTable.UpdateUI()
                         end,
@@ -320,11 +322,12 @@ local options = {
                         type = "range",
                         name = "Set Thirst",
                         desc = "Adjust your Thirst stat.",
-                        min = 0, max = 100, step = 1,
+                        min = 0, max = 200, step = 1,
                         get = function() return addonTable.Thirst or 0 end,
                         set = function(_, val)
                             addonTable.Thirst = val
                             addonTable.charData.Thirst = val
+                            addonTable.ResetStage("Thirst", addonTable.Thirst)
                             addonTable.SaveData()
                             addonTable.UpdateUI()
                         end,
@@ -344,6 +347,7 @@ local options = {
                         desc = "Enable or disable Fatigue tracking.",
                         get = function() return addonTable.charData and addonTable.charData.config.fatigueEnabled or false end,
                         set = function(_, val) addonTable.charData.config.fatigueEnabled = val 
+                            addonTable.ResetStage("Fatigue", addonTable.Fatigue)
                             addonTable.SaveData()
                             addonTable.UpdateUI()
                             addonTable.ApplyUISettings()
@@ -354,7 +358,7 @@ local options = {
                         type = "range",
                         name = "Set Fatigue",
                         desc = "Adjust your Fatigue stat.",
-                        min = 0, max = 100, step = 1,
+                        min = 0, max = 200, step = 1,
                         get = function() return addonTable.Fatigue or 0 end,
                         set = function(_, val)
                             addonTable.Fatigue = val
@@ -388,11 +392,12 @@ local options = {
                         type = "range",
                         name = "Set Hygiene",
                         desc = "Adjust your Hygiene stat.",
-                        min = 0, max = 100, step = 1,
+                        min = 0, max = 200, step = 1,
                         get = function() return addonTable.Hygiene or 0 end,
                         set = function(_, val)
                             addonTable.Hygiene = val
                             addonTable.charData.Hygiene = val
+                            addonTable.ResetStage("Hygiene", addonTable.Hygiene)
                             addonTable.SaveData()
                             addonTable.UpdateUI()
                         end,
@@ -423,11 +428,12 @@ local options = {
                         type = "range",
                         name = "Set Bladder",
                         desc = "Adjust your Bladder stat.",
-                        min = 0, max = 100, step = 1,
+                        min = 0, max = 200, step = 1,
                         get = function() return addonTable.Bladder or 0 end,
                         set = function(_, val)
                             addonTable.Bladder = val
                             addonTable.charData.Bladder = val
+                            addonTable.ResetStage("Bladder", addonTable.Bladder)
                             addonTable.SaveData()
                             addonTable.UpdateUI()
                         end,

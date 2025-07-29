@@ -5,7 +5,8 @@ function addonTable.InitializeLastStages()
     addonTable.lastStage = addonTable.lastStage or {}
 
     local function determineStage(value)
-        if value > 75 then return 100
+        if value > 100 then return 200
+        elseif value > 75 then return 100
         elseif value > 50 then return 75
         elseif value > 25 then return 50
         elseif value > 10 then return 25
@@ -33,7 +34,9 @@ end
 
 -- Reset Stage
 function addonTable.ResetStage(stat, value)
-    if value > 75 then
+    if value > 100 then
+        addonTable.lastStage[stat] = 200
+    elseif value > 75 then
         addonTable.lastStage[stat] = 100
     elseif value > 50 then
         addonTable.lastStage[stat] = 75
@@ -89,7 +92,8 @@ end
 
 -- Check Alerts
 local function getStageBucket(value)
-    if value > 75 then return 100
+    if value > 100 then return 200
+    elseif value > 75 then return 100
     elseif value > 50 then return 75
     elseif value > 25 then return 50
     elseif value > 10 then return 25
@@ -99,6 +103,8 @@ end
 
 function addonTable.CheckAlerts()
     local function processAlert(stat, value)
+        if value >= 100 then return end
+
         local previousBucket = addonTable.lastStage[stat] or 100
         local currentBucket = getStageBucket(value)
 
@@ -178,12 +184,21 @@ function addonTable.GetWeaponWeightMultiplier()
             if subClassID == 0 or subClassID == 4 or subClassID == 7 then
                 weaponCounts.OneHanded = weaponCounts.OneHanded + 1
                 multiplier = multiplier + 0.5
-            elseif subClassID == 1 or subClassID == 5 or subClassID == 6 or subClassID == 8 then
+            elseif subClassID == 1 or subClassID == 5 or subClassID == 8 then
                 weaponCounts.TwoHanded = weaponCounts.TwoHanded + 1
-                multiplier = multiplier + 1
+                multiplier = multiplier + 0.7
+            elseif subClassID == 6 then
+                weaponCounts.TwoHanded = weaponCounts.TwoHanded + 1
+                multiplier = multiplier + 0.8
+            elseif subClassID == 15 then
+                weaponCounts.OneHanded = weaponCounts.OneHanded + 1
+                multiplier = multiplier + 0.2
+            elseif subClassID == 10 then
+                weaponCounts.TwoHanded = weaponCounts.TwoHanded + 1
+                multiplier = multiplier + 0.7
             elseif subClassID == 2 or subClassID == 3 or subClassID == 18 then
                 weaponCounts.Bow = weaponCounts.Bow + 1
-                multiplier = multiplier + 0.6
+                multiplier = multiplier + 1
             end
         elseif classID == 4 and subClassID == 6 then
             weaponCounts.Shield = weaponCounts.Shield + 1
@@ -248,13 +263,13 @@ function addonTable.AdjustStats()
     local multiplier, armorCounts, weaponCounts = addonTable.GetTotalWeightMultiplier()
 
     if addonTable.charData.config.hungerEnabled then
-        addonTable.Hunger = math.max(0, addonTable.Hunger - (1 * multiplier))
+        addonTable.Hunger = math.max(0, addonTable.Hunger - (0.5 * multiplier))
     end
     if addonTable.charData.config.thirstEnabled then
-        addonTable.Thirst = math.max(0, addonTable.Thirst - (2 * multiplier))
+        addonTable.Thirst = math.max(0, addonTable.Thirst - (1 * multiplier))
     end
     if addonTable.charData.config.fatigueEnabled then
-        addonTable.Fatigue = math.max(0, addonTable.Fatigue - (1 * multiplier))
+        addonTable.Fatigue = math.max(0, addonTable.Fatigue - (0.3 * multiplier))
     end
     if addonTable.charData.config.hygieneEnabled then
         addonTable.Hygiene = math.max(0, addonTable.Hygiene - (1 * multiplier))
@@ -305,10 +320,10 @@ function addonTable.CheckMovement()
             addonTable.lastX, addonTable.lastY = x, y
 
             if addonTable.debugMove then
-                print(string.format("|cffFFD700[SB Debug]|r Step detected! Total: |cffFFFF00%d|r", addonTable.stepsTaken))
+                addonTable.UpdateUI()
             end
 
-            if addonTable.stepsTaken % 100 == 0 and addonTable.charData.config.movementDrainEnabled then
+            if addonTable.stepsTaken % 200 == 0 and addonTable.charData.config.movementDrainEnabled then
                 local multiplier = 1.0
                 if addonTable.charData.config.armorDrainEnabled then
                     local armorMult = select(1, addonTable.GetArmorWeightMultiplier())
@@ -323,18 +338,19 @@ function addonTable.CheckMovement()
                     addonTable.Hunger = math.max(0, addonTable.Hunger - (1 * multiplier))
                 end
                 if addonTable.charData.config.thirstEnabled then
-                    addonTable.Thirst = math.max(0, addonTable.Thirst - (2 * multiplier))
+                    addonTable.Thirst = math.max(0, addonTable.Thirst - (1 * multiplier))
                 end
                 if addonTable.charData.config.fatigueEnabled then
-                    addonTable.Fatigue = math.max(0, addonTable.Fatigue - (3 * multiplier))
+                    addonTable.Fatigue = math.max(0, addonTable.Fatigue - (0.8 * multiplier))
                 end
                 if addonTable.charData.config.hygieneEnabled then
-                    addonTable.Hygiene = math.max(0, addonTable.Hygiene - (2 * multiplier))
+                    addonTable.Hygiene = math.max(0, addonTable.Hygiene - (1 * multiplier))
                 end
 
                 if addonTable.charData.config.bladderEnabled then
                     addonTable.Bladder = math.max(0, addonTable.Bladder - (1 * multiplier))
                 end
+
                 addonTable.SaveData()
                 addonTable.UpdateUI()
                 addonTable.CheckAlerts()
