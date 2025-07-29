@@ -2,7 +2,7 @@
 ## Title: Survivor's Burden
 ## Notes: Tracks basic survival needs for RP immersion.
 ## Author: Dewkins
-## Version: v1.0
+## Version: v1.1
 ## SavedVariables: SurvivorsBurdenDB, SB_MinimapDB
 ## Category: Roleplay
 ## IconTexture: Interface\Icons\ability_hunter_camouflage

@@ -3,7 +3,7 @@ local addonName, addonTable = ...
 -- Version Info
 addonTable.addonName = addonName
 addonTable.addonAuthor = "Dewkins"
-addonTable.addonVersion = "v1.0"
+addonTable.addonVersion = "v1.1"
 
 -- Saved Variables
 SurvivorsBurdenDB = SurvivorsBurdenDB or {}
